@@ -5,6 +5,7 @@ import os
 from http import HTTPStatus
 from discord.ext import commands
 
+# set the bot prefix
 bot = commands.Bot(command_prefix='?')
 
 bot_token = os.environ["KOMI_PY_KEY"]
@@ -12,7 +13,7 @@ steam_token = os.environ["KOMI_STEAM_KEY"]
 
 steam_info_file = open("steamdb.json", "w")
 
-
+# runs on startup of the bot
 @bot.event
 async def on_ready():
     print('Logged in as')
@@ -20,7 +21,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-
+# set user color to specified hex color code
 @bot.command()
 async def sethex(ctx, hex: str):
     try:
@@ -30,7 +31,7 @@ async def sethex(ctx, hex: str):
         await ctx.send('something went wrong, maybe format was bad?')
         return
 
-
+# set user color to specified rgb color code
 @bot.command()
 async def setrgb(ctx, r: int, g: int, b: int):
     try:
@@ -45,7 +46,8 @@ async def setrgb(ctx, r: int, g: int, b: int):
 async def registersteam(ctx):
     get_player_data(1)
 
-
+# access the steam profile belonging to the given steam id
+# returns output via an embed containing user name and their avatar.
 @bot.command()
 async def getsteaminfo(ctx, steamid: str):
     resp = requests.get(
@@ -74,7 +76,7 @@ def get_player_data(players):
         return json.loads(resp.json())
     return None
 
-
+# generates new role with specified color data and assigns it to user
 async def set_color(ctx, color_data):
     guild = ctx.guild
     user = ctx.author
